@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Stopwatch</title>
+    <style>
+        .container {
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+        }
+        button{
+            font-size: 25px;
+            padding: 5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span></h1>
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+        </div>
+    </div>
+</body>
+<script>
+    const second = document.getElementById('second');
+    const minute = document.getElementById('minute');
+    const hour = document.getElementById('hour');
+
+    const startBtn = document.getElementById('start');
+    const pauseBtn = document.getElementById('pause');
+
+    let running = false;
+
+    const make2digit = count => {
+        if(count.length < 2){
+            count = '0' + count;
+        }
+        return count;
+    };
+    
+
+    const runClock = () => {
+        setInterval(() => {
+            if (running) {
+                second.innerText = String(parseInt(second.innerText) + 1);
+                second.innerText = make2digit(second.innerText);
+                if (second.innerText == 60) {
+                    second.innerText = '00';
+                    minute.innerText = String(parseInt(minute.innerText) + 1);
+                    minute.innerText = make2digit(minute.innerText);
+                    if (minute.innerText == 60) {
+                        minute.innerText = '00';
+                        hour.innerText = String(parseInt(hour.innerText) + 1);
+                        hour.innerText = make2digit(hour.innerText);
+                    }
+                }
+            }
+        }, 1000);
+    };
+
+    const resetClock = () => {
+        second.innerText = '00';
+        minute.innerText = '00';
+        hour.innerText = '00';
+    };
+
+    startBtn.addEventListener('click', () => {
+        resetClock();
+        if (startBtn.innerText != 'Restart') {
+            runClock();
+        }
+        startBtn.innerText = 'Restart';
+        pauseBtn.innerText = 'Pause';
+        running = true;
+    });
+
+    pauseBtn.addEventListener('click', () => {
+        if (running) {
+            // Pause
+            running = false;
+            pauseBtn.innerText = 'Resume';
+        } else {
+            // Resume
+            running = true;
+            pauseBtn.innerText = 'Pause';
+        }
+    });
+
+</script>
+</html>
